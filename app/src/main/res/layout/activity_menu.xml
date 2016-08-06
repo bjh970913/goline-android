@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="kr.heek.goline.MenuActivity">
+
+    <Button
+        android:id="@+id/create_room"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="방 만들기" />
+
+    <EditText
+        android:id="@+id/room_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Room ID" />
+
+    <Button
+        android:id="@+id/join_room"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="방 들어가기" />
+
+</LinearLayout>
