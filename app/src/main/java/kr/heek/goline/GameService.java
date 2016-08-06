@@ -52,7 +52,7 @@ public class GameService extends Service {
                 }
                 last_updated = time;
 
-                PostRequest request = new PostRequest("http://goline.heek.kr/update", new StandardRequest.StandardListener() {
+                PostRequest request = new PostRequest("http://goline.heek.kr:8080/update", new StandardRequest.StandardListener() {
                     @Override
                     public void onResponse(JSONObject o) {
                         int status = 0;
