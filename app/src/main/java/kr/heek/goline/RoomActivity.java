@@ -18,8 +18,7 @@ public class RoomActivity extends AppCompatActivity {
     private RecyclerView users_list;
     private TextView tvRoomId;
     private Button btnStart;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

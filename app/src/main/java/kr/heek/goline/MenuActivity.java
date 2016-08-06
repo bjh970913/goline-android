@@ -34,20 +34,21 @@ public class MenuActivity extends AppCompatActivity {
         findViewById(R.id.create_room).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PostRequest req = new PostRequest("http://goline.heek.kr/create", new StandardRequest.StandardListener() {
-                    @Override
-                    public void onResponse(JSONObject o) {
-                        Intent intent = new Intent(MenuActivity.this, RoomActivity.class);
-                        try {
-                            intent.putExtra("room_id", o.getString("room_id"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        startActivity(intent);
-                    }
-                });
-                req.putParam("user_id", Settings.Secure.ANDROID_ID);
-                volley.pushQueue(req);
+                startActivity(new Intent(MenuActivity.this, CreateRoomActivity.class));
+//                PostRequest req = new PostRequest("http://goline.heek.kr/create", new StandardRequest.StandardListener() {
+//                    @Override
+//                    public void onResponse(JSONObject o) {
+//                        Intent intent = new Intent(MenuActivity.this, RoomActivity.class);
+//                        try {
+//                            intent.putExtra("room_id", o.getString("room_id"));
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                        startActivity(intent);
+//                    }
+//                });
+//                req.putParam("user_id", Settings.Secure.ANDROID_ID);
+//                volley.pushQueue(req);
             }
         });
 
@@ -57,10 +58,10 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String room_id = editRoomId.getText().toString();
 
-                PostRequest req = new PostRequest("http://goline.heek.kr/join", new StandardRequest.StandardListener() {
+                PostRequest req = new PostRequest("http://goline.heek.kr:8080/join", new StandardRequest.StandardListener() {
                     @Override
                     public void onResponse(JSONObject o) {
-                        Intent intent = new Intent(MenuActivity.this, RoomActivity.class);
+                        Intent intent = new Intent(MenuActivity.this, GameActivity.class);
                         intent.putExtra("room_id", room_id);
                         startActivity(intent);
                     }
@@ -71,6 +72,6 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION }, 0);
+        ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET }, 0);
     }
 }
