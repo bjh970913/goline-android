@@ -19,6 +19,8 @@ public class GameActivity extends AppCompatActivity {
 
     private String room_id;
 
+    Intent serviceIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,19 +50,25 @@ public class GameActivity extends AppCompatActivity {
 //            }
         };
 
-        Intent intent = new Intent(GameActivity.this, GameService.class);
+        serviceIntent = new Intent(GameActivity.this, GameService.class);
 
         webView.setWebChromeClient(client);
 
-        webviewInterface = new WebviewInterface(GameActivity.this, webView, intent); //JavascriptInterface 객체화
+        webviewInterface = new WebviewInterface(GameActivity.this, webView, serviceIntent); //JavascriptInterface 객체화
         webView.addJavascriptInterface(webviewInterface, "Android");
 
         String url = String.format("http://goline.heek.kr:8080/play#room_id=%s&user_id=%s", room_id, Settings.Secure.ANDROID_ID);
 
         webView.loadUrl(url);
 
-        intent.putExtra("room_id", room_id);
-        startService(intent);
+        serviceIntent.putExtra("room_id", room_id);
+        startService(serviceIntent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(serviceIntent);
+
+    }
 }
