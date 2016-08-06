@@ -12,6 +12,7 @@ import android.widget.EditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import kr.heek.goline.utils.UUIDUtils;
 import kr.heek.goline.utils.volley.PostRequest;
 import kr.heek.goline.utils.volley.StandardRequest;
 import kr.heek.goline.utils.volley.VolleyManager;
@@ -47,7 +48,7 @@ public class MenuActivity extends AppCompatActivity {
 //                        startActivity(intent);
 //                    }
 //                });
-//                req.putParam("user_id", Settings.Secure.ANDROID_ID);
+//                req.putParam("user_id", UUIDUtils.getDevicesUUID(getApplicationContext()));
 //                volley.pushQueue(req);
             }
         });
@@ -66,12 +67,12 @@ public class MenuActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
-                req.putParam("user_id", Settings.Secure.ANDROID_ID);
+                req.putParam("user_id", UUIDUtils.getDevicesUUID(getApplicationContext()));
                 req.putParam("room_id", room_id);
                 volley.pushQueue(req);
             }
         });
 
-        ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET }, 0);
+        ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET, Manifest.permission.READ_PHONE_STATE }, 0);
     }
 }
