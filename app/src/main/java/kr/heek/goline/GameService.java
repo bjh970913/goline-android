@@ -16,6 +16,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import kr.heek.goline.utils.UUIDUtils;
 import kr.heek.goline.utils.volley.PostRequest;
 import kr.heek.goline.utils.volley.StandardRequest;
 import kr.heek.goline.utils.volley.VolleyManager;
@@ -40,7 +41,7 @@ public class GameService extends Service {
         volley = VolleyManager.getInstance(getApplicationContext());
 
         final String room_id = intent.getStringExtra("room_id");
-        final String user_id = Settings.Secure.ANDROID_ID;
+        final String user_id = UUIDUtils.getDevicesUUID(getApplicationContext());
 
         locationListener = new LocationListener() {
             @Override

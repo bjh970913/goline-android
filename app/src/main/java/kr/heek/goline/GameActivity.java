@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.android.volley.toolbox.Volley;
 
+import kr.heek.goline.utils.UUIDUtils;
 import kr.heek.goline.utils.volley.VolleyManager;
 
 public class GameActivity extends AppCompatActivity {
@@ -62,8 +63,7 @@ public class GameActivity extends AppCompatActivity {
         webviewInterface = new WebviewInterface(GameActivity.this, webView, serviceIntent); //JavascriptInterface 객체화
         webView.addJavascriptInterface(webviewInterface, "Android");
 
-        String url = String.format("http://goline.heek.kr:8080/play#room_id=%s&user_id=%s", room_id, Settings.Secure.ANDROID_ID);
-
+        String url = String.format("http://goline.heek.kr:8080/play#room_id=%s&user_id=%s", room_id, UUIDUtils.getDevicesUUID(getApplicationContext()));
         webView.loadUrl(url);
 
         serviceIntent.putExtra("room_id", room_id);
