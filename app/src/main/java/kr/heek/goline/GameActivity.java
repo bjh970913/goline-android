@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Toast;
@@ -68,6 +70,24 @@ public class GameActivity extends AppCompatActivity {
 
         serviceIntent.putExtra("room_id", room_id);
         startService(serviceIntent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.game, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.menu_share) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "http://goline.heek.kr:8080/invite#room_id=" + room_id);
+            sendIntent.setType("text/plain");
+            startActivity(Intent.createChooser(sendIntent, "Share to"));
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
