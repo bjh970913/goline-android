@@ -16,7 +16,13 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        room_id = getIntent().getStringExtra("room_id");
+        if (getIntent().hasExtra("room_id")) {
+            // Opened by Intent
+            room_id = getIntent().getStringExtra("room_id");
+        } else {
+            // Opened by URI
+            room_id = getIntent().getData().getQueryParameter("room_id");
+        }
 
         setTitle(room_id);
 
