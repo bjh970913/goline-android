@@ -26,15 +26,20 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        room_id = getIntent().getStringExtra("room_id");
-        if(room_id != null) {
+        if (getIntent().hasExtra("room_id")) {
+            // Opened by Intent
+            room_id = getIntent().getStringExtra("room_id");
+        } else {
+            // Opened by URI
+            room_id = getIntent().getData().getQueryParameter("room_id");
+        }
+
+        if(room_id == null) {
             Toast.makeText(getApplicationContext(), "Room id not exist", Toast.LENGTH_SHORT).show();
             finish();
         }
 
         VolleyManager volley = VolleyManager.getInstance(getApplicationContext());
-
-
 
         setTitle(room_id);
 

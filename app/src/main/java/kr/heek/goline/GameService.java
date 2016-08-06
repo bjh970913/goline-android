@@ -59,7 +59,7 @@ public class GameService extends Service {
                         try {
                             status = o.getInt("status");
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                        } catch (NullPointerException e) {
                         }
 
                         if (status == -1) {

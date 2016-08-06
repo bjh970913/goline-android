@@ -14,6 +14,8 @@ import android.util.Log;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
+import kr.heek.goline.utils.UUIDUtils;
+
 public class CreateRoomActivity extends AppCompatActivity {
 
     private WebView webView;
@@ -31,7 +33,7 @@ public class CreateRoomActivity extends AppCompatActivity {
         WebChromeClient client = new WebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
-                if (title == "-1") {
+                if (title.equals("-1")) {
                     return;
                 }
 
@@ -78,7 +80,7 @@ public class CreateRoomActivity extends AppCompatActivity {
     }
 
     private void loadWebView(double latitude, double longitude) {
-        String url = String.format("http://goline.heek.kr:8080/create#latitude=%f&longitude=%f&user_id=%s", latitude, longitude, Settings.Secure.ANDROID_ID);
+        String url = String.format("http://goline.heek.kr:8080/create#latitude=%f&longitude=%f&user_id=%s", latitude, longitude, UUIDUtils.getDevicesUUID(getApplicationContext()));
         Log.i("CREATEROOMACTIVITY", url);
         webView.loadUrl(url);
     }
