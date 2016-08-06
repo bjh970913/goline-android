@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,9 +23,9 @@ import kr.heek.goline.utils.volley.StandardRequest;
 import kr.heek.goline.utils.volley.VolleyManager;
 
 public class GameService extends Service {
-    private final static int MIN_TIME = 2000;   // millis
-    private final static int MIN_DISTANCE = 1;  // meter
-    private final static int MIN_UPDATE = 2000;
+    private final static int MIN_TIME = 5000;   // millis
+    private final static int MIN_DISTANCE = 4;  // meter
+    private final static int MIN_UPDATE = 5000;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -52,6 +53,13 @@ public class GameService extends Service {
                     return;
                 }
                 last_updated = time;
+
+                // TODO: Delete toast
+                // TODO: Ignore low accuracy data. (Accept only ~10-15)
+                Toast.makeText(getApplicationContext(), "Acc: " + location.getAccuracy(), Toast.LENGTH_SHORT).show();
+                if (location.getAccuracy() > 20) {
+                    return;
+                }
 
                 PostRequest request = new PostRequest("http://goline.heek.kr:8080/update", new StandardRequest.StandardListener() {
                     @Override
