@@ -19,15 +19,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".RoomActivity" />
-        <activity
-            android:name=".GameActivity"
-            android:label="@string/title_activity_game"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".GameService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".GameActivity" />
+        <activity android:name=".CreateRoomActivity"></activity>
     </application>
 
 </manifest>

@@ -12,7 +12,11 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import kr.heek.goline.utils.volley.PostRequest;
+import kr.heek.goline.utils.volley.StandardRequest;
 import kr.heek.goline.utils.volley.VolleyManager;
 
 public class GameService extends Service {
@@ -21,6 +25,7 @@ public class GameService extends Service {
     private final static int MIN_UPDATE = 2000;
 
     private LocationManager locationManager;
+    private LocationListener locationListener;
     private VolleyManager volley;
 
     private long last_updated = 0;
@@ -36,7 +41,7 @@ public class GameService extends Service {
         final String room_id = intent.getStringExtra("room_id");
         final String user_id = Settings.Secure.ANDROID_ID;
 
-        LocationListener listener = new LocationListener() {
+        locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 long time = location.getTime();
@@ -46,7 +51,24 @@ public class GameService extends Service {
                 }
                 last_updated = time;
 
-                PostRequest request = new PostRequest("http://goline.heek.kr/update");
+                PostRequest request = new PostRequest("http://goline.heek.kr/update", new StandardRequest.StandardListener() {
+                    @Override
+                    public void onResponse(JSONObject o) {
+                        int status = 0;
+                        try {
+                            status = o.getInt("status");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (status == -1) {
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                return;
+                            }
+                            locationManager.removeUpdates(locationListener);
+                        }
+                    }
+                });
                 request.putParam("room_id", room_id);
                 request.putParam("user_id", user_id);
                 request.putParam("latitude", String.valueOf(location.getLatitude()));
@@ -70,7 +92,7 @@ public class GameService extends Service {
             }
         };
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -80,8 +102,8 @@ public class GameService extends Service {
             // for ActivityCompat#requestPermissions for more details.
             return START_NOT_STICKY;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, listener);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, listener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, locationListener);
 
         return START_STICKY;
     }
